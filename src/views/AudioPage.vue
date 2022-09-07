@@ -10,6 +10,16 @@
           class="video-js vjs-16-9"
           crossOrigin="anonymous"
         />
+        <div id="volumeList">
+          <div
+            v-for="(item, index) of volumeList"
+            :key="`volumeList_${index}`"
+            class="volume-bar"
+            :style="{
+              'height': `${item}%`,
+              'background-image': `linear-gradient(0deg, hsl(280deg 100% 20%) 0%, hsl(350deg 100% 50%) 50%, hsl(${item * 0.5}deg 100% 50%) 100%)`}"
+          />
+        </div>
       </div>
       <div id="samplePart">
         <div class="sample-title">
@@ -37,6 +47,8 @@
 <script>
 import videoJs from 'video.js';
 
+const VOLUME_LIST = 10;
+
 export default {
   name: 'AudioPage',
   data() {
@@ -45,9 +57,11 @@ export default {
       barWidth: null,
       barHeight: null,
       bufferLength: null,
+      volumeList: Array(VOLUME_LIST).fill(0),
       canvasHeight: null,
       canvasWidth: null,
       context: null,
+      fftSize: 256,
       frequencyDataList: null,
       options: {
         autoplay: true,
@@ -118,7 +132,7 @@ export default {
 
         this.analyser = audioContext.createAnalyser();
         audioSrc.connect(this.analyser);
-        this.analyser.fftSize = 256;
+        this.analyser.fftSize = this.fftSize;
         this.bufferLength = this.analyser.frequencyBinCount;
         // 주파수 데이터 초기화
         this.frequencyDataList = new Uint8Array(this.bufferLength);
@@ -168,6 +182,8 @@ export default {
 
       for (let i = 0; i < this.bufferLength; i++) {
         this.barHeight = this.frequencyDataList[i];
+        // 볼륨 시각화 리스트
+        if (i < VOLUME_LIST) this.volumeList[i] = Math.round((this.barHeight / this.fftSize) * 100);
 
         const r = this.barHeight + (25 * (i / this.bufferLength));
         const g = 250 * (i / this.bufferLength);
@@ -187,7 +203,7 @@ export default {
   display: flex; flex-direction: column; background-color: #1d1d1d; height: 100vh;
 }
 #videoPart {
-  width: 70%; border-right: 1px solid #6b6b6b;
+  position: relative; width: 70%; border-right: 1px solid #6b6b6b;
 }
 #videoPlayer {
   width: 100%; height: 100%;
@@ -213,5 +229,27 @@ export default {
 }
 .sample-item.focus {
   color: #00f700;
+}
+#volumeList {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 90%;
+  right: 8px;
+  bottom: 5%;
+  background: rgba( 255, 255, 255, 0.3 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 9px );
+  -webkit-backdrop-filter: blur( 9px );
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 1;
+}
+.volume-bar {
+  width: 10px;
+  border-radius: 8px;
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.3);
+  filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3));
 }
 </style>
