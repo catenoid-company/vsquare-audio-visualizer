@@ -238,8 +238,8 @@ export default {
   height: 90%;
   right: 8px;
   bottom: 5%;
-  background: rgba( 255, 255, 255, 0.3 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur( 9px );
   -webkit-backdrop-filter: blur( 9px );
   border-radius: 8px;
@@ -249,7 +249,7 @@ export default {
 .volume-bar {
   width: 10px;
   border-radius: 8px;
-  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.3);
-  filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3));
+  box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
 }
 </style>
