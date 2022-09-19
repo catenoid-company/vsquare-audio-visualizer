@@ -1741,3 +1741,39 @@ video::-webkit-media-text-track-display {
 .video-js *:focus:not(:focus-visible) {
     outline: none;
 }
+
+.vjs-visualizer-toggle {
+    padding: 6px !important;
+}
+.vjs-visualizer-toggle-icon {
+    border: 2px solid white;
+    background-color: white;
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+    padding-bottom: 2px;
+}
+.vjs-visualizer-toggle-icon div {
+    background: black;
+    width: 2px;
+}
+.vjs-visualizer-toggle-icon.off {
+    background-color: transparent;
+}
+.vjs-visualizer-toggle-icon.off div {
+    background: white;
+    width: 2px;
+}
+.vjs-visualizer-toggle-icon div:nth-child(1) {
+    height: 40%;
+}
+.vjs-visualizer-toggle-icon div:nth-child(2) {
+    height: 60%;
+}
+.vjs-visualizer-toggle-icon div:nth-child(3) {
+    height: 80%;
+}

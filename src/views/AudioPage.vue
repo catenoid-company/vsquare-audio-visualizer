@@ -10,7 +10,10 @@
           class="video-js vjs-16-9"
           crossOrigin="anonymous"
         />
-        <div id="volumeList">
+        <div
+          v-if="isShowVolumeList"
+          id="volumeList"
+        >
           <div
             v-for="(item, index) of volumeList"
             :key="`volumeList_${index}`"
@@ -63,6 +66,7 @@ export default {
       context: null,
       fftSize: 256,
       frequencyDataList: null,
+      isShowVolumeList: JSON.parse(localStorage.getItem('isShowVolumeList')) && true,
       options: {
         autoplay: true,
         controls: true,
@@ -122,7 +126,10 @@ export default {
       this.options.sources = [];
       this.options.sources.push(this.sampleList[this.sampleIndex]);
 
-      this.player = videoJs(document.getElementById('videoPlayer'), this.options);
+      this.player = videoJs(document.getElementById('videoPlayer'), this.options, () => {
+        console.log('ready', this.player);
+        this.appendToggleButton(this.player);
+      });
 
       this.player.on(['loadeddata'], () => {
         // 동영상 데이터 호출하고 미디어 스트림 분석 및 오디오 데이터화
@@ -194,6 +201,26 @@ export default {
 
         x += this.barWidth + 1;
       }
+    },
+    appendToggleButton() {
+      const controlBarEl = this.player.controlBar.el();
+      const buttonEl = document.createElement('button');
+      const divEl = document.createElement('div');
+      const iconEl = Array(3).fill(0).map(() => document.createElement('div'));
+      buttonEl.classList.add('vjs-visualizer-toggle', 'vjs-control', 'vjs-button');
+      divEl.classList.add('vjs-visualizer-toggle-icon');
+      if (!JSON.parse(this.isShowVolumeList)) divEl.classList.add('off');
+
+      iconEl.forEach((item) => {
+        divEl.appendChild(item);
+      });
+      buttonEl.appendChild(divEl);
+      buttonEl.onclick = () => {
+        this.isShowVolumeList = !JSON.parse(this.isShowVolumeList);
+        localStorage.setItem('isShowVolumeList', `${this.isShowVolumeList}`);
+        divEl.classList.toggle('off');
+      };
+      controlBarEl.appendChild(buttonEl);
     },
   },
 };
