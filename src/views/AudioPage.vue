@@ -127,7 +127,6 @@ export default {
       this.options.sources.push(this.sampleList[this.sampleIndex]);
 
       this.player = videoJs(document.getElementById('videoPlayer'), this.options, () => {
-        console.log('ready', this.player);
         this.appendToggleButton(this.player);
       });
 
@@ -217,7 +216,7 @@ export default {
       buttonEl.appendChild(divEl);
       buttonEl.onclick = () => {
         this.isShowVolumeList = !JSON.parse(this.isShowVolumeList);
-        localStorage.setItem('isShowVolumeList', `${this.isShowVolumeList}`);
+        localStorage.setItem('isShowVolumeList', this.isShowVolumeList.toString());
         divEl.classList.toggle('off');
       };
       controlBarEl.appendChild(buttonEl);
